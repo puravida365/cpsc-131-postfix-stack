@@ -1,92 +1,70 @@
-//==============================================================
-//	Name:    	Harry Josue Mora
-//	Course:  	CPSC 131, Section 01
-//	Project: 	Postfix (No6)
-//	Date:    	March 14, 2012
-//	Professor:       Ray Ahmadnia
-//
-//	Purpose: 	This program demonstrates how to use stacks to convert
-//       			process postfix number addition.
-//==============================================================
-
 #include <iostream>
 #include <cstdlib>
-#include <stack>
+#include <cstring>
 #include <cctype>
 
 using namespace std;
 
-int main()
+template <class T, int n>
+class STACK
 {
-int x,y,n;
-stack <char, 10> A;
-char item[10];
+   private:
+   	T elem[n];
+   	int counter;
+   public:
+   	void Clear(){ counter = 0; }
+   	bool Full(){ if (counter == n) return true; else return false;}
+   	bool Empty(){ if (counter == 0) return true; else return false;}
+   	T Pop(){ counter--; return elem[counter];}
+   	void Push(T x){ elem[counter] = x; counter++;}
+};
 
-// clear stack
-A.Clear();
+int main(){
+
+// declare variables and structures
+int x,y,n, size, result;
+STACK <char, 10> A;
+char expression[10];
 
 // get expression from user
 cout << "Enter a postfix expression with $ at the end: ";
 
-// process data
-while(strcmp(item, "$") != 0)
-{
-   if(strcmp(item, "+") == 0)
-   {
-   	x = A.Pop();
-   	y = A.Pop();
-   	A.Push(y+x);
-   }
-   else if(strcmp(item, "*") == 0)
-   {
-   	x = A.Pop();
-   	y = A.Pop();
-   	A.Push(y*x);
-   }
-   else if(strcmp(item, "/") == 0)
-   {
-   	x = A.Pop();
-   	y = A.Pop();
-   	A.Push(y/x);
-   }
-   else if(strcmp(item, "-") == 0)
-   {
-   	x = A.Pop();
-   	y = A.Pop();
-   	A.Push(y-x);
-   }
-   // if its a number
-   else
-   {    
-   	n = atoi(item);
-   	A.Push(n);
+size = expression.length();
+char input[size];
 
-   }
-   cin >> item;
+
+// process expression and insert into stack
+do{
+	if(strcmp(input, "+") == 0){
+		x = A.Pop();
+		y = A.Pop();
+		A.Push(y+x);
+	}
+	else if(strcmp(input, "*") == 0){
+		x = A.Pop();
+		y = A.Pop();
+		A.Push(y*x);
+	}
+	else if(strcmp(input, "/") == 0){
+		x = A.Pop();
+		y = A.Pop();
+		A.Push(y/x);
+	}
+	else if(strcmp(input, "-") == 0){
+		x = A.Pop();
+		y = A.Pop();
+		A.Push(y-x);
+	}
+	// if its a number
+	else{    
+		n = atoi(input);
+		A.Push(n);
+	}
+	cin.getline (expression, 10);
 }
+	
+}while(strcmp(input, "$") != 0);
 
-    int r = A.Pop();
-    // output result
-    cout << "Result is " << r << endl;
-    return(0);
+
+return(0);
 }
-
-/* SAMPLE IO
-Enter a postfix expression with $ at the end: 2
-3
-+
-$
-Result is 5
-cs101-1a:cs131 josuem11$ ./a.out
-Enter a postfix expression with $ at the end: 22
-333
-55
-+
-*
-77
-33
--
-+
-$
-Result is -124
-*/
