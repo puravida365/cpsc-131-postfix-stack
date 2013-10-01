@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
-#include <cstring>
 #include <cctype>
+#include <cstring>
 
 using namespace std;
 
@@ -18,53 +18,58 @@ class STACK
    	T Pop(){ counter--; return elem[counter];}
    	void Push(T x){ elem[counter] = x; counter++;}
 };
-
-int main(){
-
-// declare variables and structures
-int x,y,n, size, result;
+   
+int main()
+{
+int x,y,n;
 STACK <char, 10> A;
-char expression[10];
+char item[10];
+
+// clear stack
+A.Clear();
 
 // get expression from user
 cout << "Enter a postfix expression with $ at the end: ";
+cin.getline(item,10);
 
-size = expression.length();
-char input[size];
+// process data
+while(strcmp(item, "$") != 0)
+{
+   if(strcmp(item, "+") == 0)
+   {
+   	x = A.Pop();
+   	y = A.Pop();
+   	A.Push(y+x);
+   }
+   else if(strcmp(item, "*") == 0)
+   {
+   	x = A.Pop();
+   	y = A.Pop();
+   	A.Push(y*x);
+   }
+   else if(strcmp(item, "/") == 0)
+   {
+   	x = A.Pop();
+   	y = A.Pop();
+   	A.Push(y/x);
+   }
+   else if(strcmp(item, "-") == 0)
+   {
+   	x = A.Pop();
+   	y = A.Pop();
+   	A.Push(y-x);
+   }
+   // if its a number
+   else
+   {    
+   	n = atoi(item);
+   	A.Push(n);
 
-
-// process expression and insert into stack
-do{
-	if(strcmp(input, "+") == 0){
-		x = A.Pop();
-		y = A.Pop();
-		A.Push(y+x);
-	}
-	else if(strcmp(input, "*") == 0){
-		x = A.Pop();
-		y = A.Pop();
-		A.Push(y*x);
-	}
-	else if(strcmp(input, "/") == 0){
-		x = A.Pop();
-		y = A.Pop();
-		A.Push(y/x);
-	}
-	else if(strcmp(input, "-") == 0){
-		x = A.Pop();
-		y = A.Pop();
-		A.Push(y-x);
-	}
-	// if its a number
-	else{    
-		n = atoi(input);
-		A.Push(n);
-	}
-	cin.getline (expression, 10);
+   }
 }
-	
-}while(strcmp(input, "$") != 0);
 
-
-return(0);
+    int r = A.Pop();
+    // output result
+    cout << "Result is " << r << endl;
+    return(0);
 }
